@@ -15,6 +15,7 @@ type ConfigKey =
     | "pest.generateDocBlocks"
     | "pest.helperFilePath"
     | "env.viteQuickFix"
+    | "lsp.path"
     | "pint.runOnSave"
     | "testRunner.enabled";
 

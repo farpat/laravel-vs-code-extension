@@ -1085,6 +1085,11 @@
                     "default": "off",
                     "description": "Traces the communication between VS Code and the Laravel LSP server."
                 },
+                "Laravel.lsp.path": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "Path to the Laravel LSP server to run instead of the released binary. Useful to run a server built from source.\n\n_Requires extension reload after changing._"
+                },
                 "Laravel.basePath": {
                     "type": "string",
                     "default": "",

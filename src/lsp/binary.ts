@@ -6,9 +6,20 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
+import { config } from "@src/support/config";
 
 const LAST_UPDATE_CHECK_KEY = "laravel.lsp.lastUpdateCheck";
 export const LSP_UPDATE_THROTTLE_MS = 2 * 60 * 60 * 1000;
+
+/**
+ * The server the editor should run instead of the released one: a setting for a server
+ * kept next to the project, the environment variable for a one-off run.
+ */
+const customLspBinaryPath = (): string | undefined => {
+    const configured = config<string>("lsp.path", "").trim();
+
+    return configured === "" ? process.env.LARAVEL_LSP_BINARY_PATH : configured;
+};
 
 let lspBinaryPath: string | undefined = process.env.LARAVEL_LSP_BINARY_PATH;
 let lspBinaryPathReady: Promise<string | undefined> =
@@ -37,7 +48,7 @@ export const getLspBinaryPath = (): Promise<string | undefined> => {
 };
 
 export const isUsingCustomLspBinary = (): boolean => {
-    return process.env.LARAVEL_LSP_BINARY_PATH !== undefined;
+    return customLspBinaryPath() !== undefined;
 };
 
 export const shouldCheckForLspUpdate = (
@@ -86,7 +97,7 @@ export const findCachedLspBinary = (
 
 export const setLspBinaryPath = (context: vscode.ExtensionContext): void => {
     if (isUsingCustomLspBinary()) {
-        setActiveLspBinaryPath(process.env.LARAVEL_LSP_BINARY_PATH);
+        setActiveLspBinaryPath(customLspBinaryPath());
         return;
     }
 
@@ -195,7 +206,7 @@ const performLspBinaryUpdate = async (
     if (isUsingCustomLspBinary()) {
         return {
             status: "custom",
-            path: process.env.LARAVEL_LSP_BINARY_PATH!,
+            path: customLspBinaryPath()!,
         };
     }
 
