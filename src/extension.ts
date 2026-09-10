@@ -18,6 +18,10 @@ import {
     runPintOnSave,
 } from "./commands/pint";
 import {
+    extractBladeComponent,
+    extractBladeComponentCommand,
+} from "./commands/extractBladeComponent";
+import {
     htmlClassToBladeDirectiveCommands,
     refactorAllHtmlClassesToBladeDirectives,
     refactorSelectedHtmlClassToBladeDirective,
@@ -150,6 +154,10 @@ export async function activate(context: vscode.ExtensionContext) {
                 () => wrapSelectionCommand(helper),
             );
         }),
+        vscode.commands.registerCommand(
+            extractBladeComponentCommand,
+            extractBladeComponent,
+        ),
         vscode.commands.registerCommand(
             htmlClassToBladeDirectiveCommands.selected,
             refactorSelectedHtmlClassToBladeDirective,

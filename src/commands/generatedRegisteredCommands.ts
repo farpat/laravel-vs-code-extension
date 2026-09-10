@@ -11,6 +11,7 @@ export type RegisteredCommand =
     | "laravel.wrapWithHelper.dump"
     | "laravel.wrapWithHelper.collect"
     | "laravel.wrapWithHelper.str"
+    | "laravel.extractBladeComponent"
     | "laravel.refactorSelectedHtmlClassToBladeDirective"
     | "laravel.refactorAllHtmlClassesToBladeDirectives"
     | "laravel.namespace.generate"

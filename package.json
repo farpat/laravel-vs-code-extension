@@ -3,7 +3,7 @@
     "publisher": "laravel",
     "displayName": "Laravel",
     "description": "Official VS Code extension for Laravel",
-    "version": "2.0.0",
+    "version": "2.99.15",
     "engines": {
         "vscode": "^1.89.0"
     },
@@ -66,6 +66,11 @@
                     "group": "laravel"
                 },
                 {
+                    "command": "laravel.extractBladeComponent",
+                    "when": "editorHasSelection && resourceLangId == blade",
+                    "group": "laravel"
+                },
+                {
                     "command": "laravel.wrapWithHelper.dd",
                     "when": "false",
                     "group": "laravel"
@@ -83,6 +88,11 @@
                 {
                     "command": "laravel.wrapWithHelper.str",
                     "when": "false",
+                    "group": "laravel"
+                },
+                {
+                    "command": "laravel.extractBladeComponent",
+                    "when": "editorHasSelection && resourceLangId == blade",
                     "group": "laravel"
                 },
                 {
@@ -675,6 +685,11 @@
             {
                 "command": "laravel.wrapWithHelper.str",
                 "title": "with str(...)",
+                "category": "Laravel"
+            },
+            {
+                "command": "laravel.extractBladeComponent",
+                "title": "Extract selected markup to a Blade component",
                 "category": "Laravel"
             },
             {

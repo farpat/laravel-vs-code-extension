@@ -6,5 +6,6 @@ export default defineConfig({
     mocha: {
         ui: "tdd",
         timeout: 20000,
+        require: ["./mocha-aliases.cjs"],
     },
 });
