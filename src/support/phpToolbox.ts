@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { MemberAlias, MemberSymbol } from "./eloquentAttributes";
 
 /**
  * The part of PHP Toolbox's API this extension relies on, spelt out here because nothing
@@ -19,6 +20,9 @@ export interface PhpToolboxListing {
 
 export interface PhpToolboxApi {
     showUsages(listing: PhpToolboxListing): Promise<void>;
+    registerMemberAliasProvider(provider: {
+        aliasesOf(member: MemberSymbol): MemberAlias[];
+    }): vscode.Disposable;
 }
 
 /** The PHP Toolbox extension, activated, or nothing when it is not installed. */

@@ -22,6 +22,8 @@ import {
     extractBladeComponentCommand,
 } from "./commands/extractBladeComponent";
 import { showUsagesCommand } from "./commands/showUsages";
+import { eloquentAttributeAliases } from "./support/eloquentAttributes";
+import { phpToolbox } from "./support/phpToolbox";
 import {
     htmlClassToBladeDirectiveCommands,
     refactorAllHtmlClassesToBladeDirectives,
@@ -111,6 +113,17 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     info("Started");
+
+    // PHP Toolbox counts what reaches a method; Eloquent reaches an accessor as a property.
+    const toolbox = await phpToolbox();
+
+    if (toolbox) {
+        context.subscriptions.push(
+            toolbox.registerMemberAliasProvider({
+                aliasesOf: eloquentAttributeAliases,
+            }),
+        );
+    }
 
     warnAboutLegacyPhpCommand();
 
