@@ -38,7 +38,7 @@ suite("Eloquent Attribute Lens Test Suite", () => {
         await activateExtension();
     });
 
-    test("counts the property reads and writes above an accessor", async () => {
+    test("counts the property reads and writes above an accessor, query results included", async () => {
         const toolbox = vscode.extensions.getExtension("farrugia.php-toolbox");
 
         assert.ok(
@@ -60,6 +60,6 @@ suite("Eloquent Attribute Lens Test Suite", () => {
             (candidate) => candidate.range.start.line === line,
         );
 
-        assert.strictEqual(lens?.command?.title, "2 reads, 1 write");
+        assert.strictEqual(lens?.command?.title, "3 reads, 1 write");
     });
 });

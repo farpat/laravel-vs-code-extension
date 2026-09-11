@@ -24,6 +24,7 @@ import {
 import { showUsagesCommand } from "./commands/showUsages";
 import { CONTAINER_FACTORIES } from "./support/containerFactories";
 import { eloquentAttributeAliases } from "./support/eloquentAttributes";
+import { eloquentMemberType } from "./support/eloquentMembers";
 import { phpToolbox } from "./support/phpToolbox";
 import {
     htmlClassToBladeDirectiveCommands,
@@ -116,7 +117,8 @@ export async function activate(context: vscode.ExtensionContext) {
     info("Started");
 
     // PHP Toolbox counts what reaches a method; Laravel reaches it in ways plain PHP does
-    // not show: an accessor read as a property, a class built by the container.
+    // not show: an accessor read as a property, a class built by the container, a model
+    // handed back by a query.
     const toolbox = await phpToolbox();
 
     if (toolbox) {
@@ -125,6 +127,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 aliasesOf: eloquentAttributeAliases,
             }),
             toolbox.registerInstanceFactories(CONTAINER_FACTORIES),
+            toolbox.registerMemberTypeProvider({ typeOf: eloquentMemberType }),
         );
     }
 

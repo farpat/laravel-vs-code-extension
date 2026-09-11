@@ -17,4 +17,9 @@ class ConfigurationController extends Controller
 
         return $configuration->formatted_value;
     }
+
+    public function latest(): string
+    {
+        return Configuration::query()->where('key', 'pricing')->firstOrFail()->formatted_value;
+    }
 }
