@@ -3,7 +3,7 @@
     "publisher": "laravel",
     "displayName": "Laravel",
     "description": "Official VS Code extension for Laravel",
-    "version": "2.99.15",
+    "version": "2.99.17",
     "engines": {
         "vscode": "^1.89.0"
     },
@@ -710,6 +710,11 @@
             {
                 "command": "laravel.goToRoute",
                 "title": "Go to Route",
+                "category": "Laravel"
+            },
+            {
+                "command": "laravel.showUsages",
+                "title": "Show Usages",
                 "category": "Laravel"
             },
             {

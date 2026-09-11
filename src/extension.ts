@@ -21,6 +21,7 @@ import {
     extractBladeComponent,
     extractBladeComponentCommand,
 } from "./commands/extractBladeComponent";
+import { showUsagesCommand } from "./commands/showUsages";
 import {
     htmlClassToBladeDirectiveCommands,
     refactorAllHtmlClassesToBladeDirectives,
@@ -125,6 +126,13 @@ export async function activate(context: vscode.ExtensionContext) {
         const { registerTestRunner } = await import("./test-runner/index.js");
 
         registerTestRunner();
+
+        context.subscriptions.push(
+            vscode.commands.registerCommand(
+                commandName("laravel.showUsages"),
+                showUsagesCommand,
+            ),
+        );
     }
 
     void checkForLspUpdate(context);
