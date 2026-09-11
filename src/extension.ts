@@ -22,6 +22,7 @@ import {
     extractBladeComponentCommand,
 } from "./commands/extractBladeComponent";
 import { showUsagesCommand } from "./commands/showUsages";
+import { CONTAINER_FACTORIES } from "./support/containerFactories";
 import { eloquentAttributeAliases } from "./support/eloquentAttributes";
 import { phpToolbox } from "./support/phpToolbox";
 import {
@@ -114,7 +115,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
     info("Started");
 
-    // PHP Toolbox counts what reaches a method; Eloquent reaches an accessor as a property.
+    // PHP Toolbox counts what reaches a method; Laravel reaches it in ways plain PHP does
+    // not show: an accessor read as a property, a class built by the container.
     const toolbox = await phpToolbox();
 
     if (toolbox) {
@@ -122,6 +124,7 @@ export async function activate(context: vscode.ExtensionContext) {
             toolbox.registerMemberAliasProvider({
                 aliasesOf: eloquentAttributeAliases,
             }),
+            toolbox.registerInstanceFactories(CONTAINER_FACTORIES),
         );
     }
 

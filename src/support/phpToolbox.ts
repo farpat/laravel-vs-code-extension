@@ -23,6 +23,7 @@ export interface PhpToolboxApi {
     registerMemberAliasProvider(provider: {
         aliasesOf(member: MemberSymbol): MemberAlias[];
     }): vscode.Disposable;
+    registerInstanceFactories(functions: string[]): vscode.Disposable;
 }
 
 /** The PHP Toolbox extension, activated, or nothing when it is not installed. */
