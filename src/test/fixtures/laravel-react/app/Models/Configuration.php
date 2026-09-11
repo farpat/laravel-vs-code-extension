@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static \Database\Factories\ConfigurationFactory factory($count = null, $state = [])
+ */
 class Configuration extends Model
 {
     protected function formattedValue(): Attribute

@@ -22,4 +22,9 @@ class ConfigurationController extends Controller
     {
         return Configuration::query()->where('key', 'pricing')->firstOrFail()->formatted_value;
     }
+
+    public function seeded(): string
+    {
+        return Configuration::factory()->pricing()->create()->formatted_value;
+    }
 }
