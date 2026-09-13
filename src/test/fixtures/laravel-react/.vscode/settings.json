@@ -1,0 +1,4 @@
+{
+    // The usages lens hangs on the PHP Toolbox switch, off by default: the tests read the count it shows.
+    "phpToolbox.usagesLens.enabled": true
+}

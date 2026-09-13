@@ -1,10 +1,13 @@
+import * as vscode from "vscode";
 import { LanguageClient } from "vscode-languageclient/node";
 import { getProjectWorkspaceFolder } from "../support/project";
 import { getLspBinaryPath } from "./binary";
 import { createClientOptions, createServerOptions } from "./options";
 import { clearResolvedPhpCommand, setResolvedPhpCommand } from "./php";
+import { followUsagesLensSetting } from "./usagesLens";
 
 let client: LanguageClient | undefined;
+let usagesLensWatcher: vscode.Disposable | undefined;
 
 type LaravelInitializeResult = {
     laravel?: {
@@ -45,12 +48,16 @@ export async function startLspClient(): Promise<LanguageClient | undefined> {
     }
 
     client = lspClient;
+    usagesLensWatcher = followUsagesLensSetting(lspClient);
 
     return client;
 }
 
 export async function stopLspClient(): Promise<void> {
     clearResolvedPhpCommand();
+
+    usagesLensWatcher?.dispose();
+    usagesLensWatcher = undefined;
 
     if (client) {
         await client.stop();
