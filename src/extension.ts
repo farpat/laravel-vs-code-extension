@@ -42,7 +42,7 @@ import {
 import { configAffected } from "./support/config";
 import { collectDebugInfo } from "./support/debug";
 import { disposeWatchers } from "./support/fileWatcher";
-import { info } from "./support/logger";
+import { error, info } from "./support/logger";
 import { restartLspClient, startLspClient, stopLspClient } from "./lsp/client";
 import { setLspBinaryPath } from "./lsp/binary";
 import { clearResolvedPhpCommand, warnAboutLegacyPhpCommand } from "./lsp/php";
@@ -119,16 +119,23 @@ export async function activate(context: vscode.ExtensionContext) {
     // PHP Toolbox counts what reaches a method; Laravel reaches it in ways plain PHP does
     // not show: an accessor read as a property, a class built by the container, a model
     // handed back by a query.
+    // A toolbox that fails here must not stop the language server below.
     const toolbox = await phpToolbox();
 
-    if (toolbox) {
-        context.subscriptions.push(
-            toolbox.registerMemberAliasProvider({
-                aliasesOf: eloquentAttributeAliases,
-            }),
-            toolbox.registerInstanceFactories(CONTAINER_FACTORIES),
-            toolbox.registerMemberTypeProvider({ typeOf: eloquentMemberType }),
-        );
+    try {
+        if (toolbox) {
+            context.subscriptions.push(
+                toolbox.registerMemberAliasProvider({
+                    aliasesOf: eloquentAttributeAliases,
+                }),
+                toolbox.registerInstanceFactories(CONTAINER_FACTORIES),
+                toolbox.registerMemberTypeProvider({
+                    typeOf: eloquentMemberType,
+                }),
+            );
+        }
+    } catch (failure) {
+        error("PHP Toolbox refused the Laravel providers:", failure);
     }
 
     warnAboutLegacyPhpCommand();

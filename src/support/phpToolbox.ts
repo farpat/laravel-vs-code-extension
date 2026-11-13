@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { error } from "./logger";
 import { MemberAlias, MemberSymbol } from "./eloquentAttributes";
 import { MemberQuestion } from "./eloquentMembers";
 
@@ -30,11 +31,22 @@ export interface PhpToolboxApi {
     }): vscode.Disposable;
 }
 
-/** The PHP Toolbox extension, activated, or nothing when it is not installed. */
-export async function phpToolbox(): Promise<PhpToolboxApi | undefined> {
-    const extension = vscode.extensions.getExtension<PhpToolboxApi>(
+/**
+ * The PHP Toolbox extension, activated, or nothing when it is not installed.
+ *
+ * A toolbox that fails to start gives nothing too: this extension then runs without the
+ * toolbox features. The failure goes to the output channel, so it can be seen.
+ */
+export async function phpToolbox(
+    extension = vscode.extensions.getExtension<PhpToolboxApi>(
         "farrugia.php-toolbox",
-    );
+    ),
+): Promise<PhpToolboxApi | undefined> {
+    try {
+        return await extension?.activate();
+    } catch (failure) {
+        error("PHP Toolbox failed to start, its features are off:", failure);
 
-    return extension?.activate();
+        return undefined;
+    }
 }
