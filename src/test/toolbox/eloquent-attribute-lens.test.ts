@@ -62,4 +62,22 @@ suite("Eloquent Attribute Lens Test Suite", () => {
 
         assert.strictEqual(lens?.command?.title, "4 reads, 1 write");
     });
+
+    test("counts a read through factory() on a model with no factory docblock", async () => {
+        const document = await vscode.workspace.openTextDocument(
+            uri("app/Models/Coupon.php"),
+        );
+
+        await vscode.window.showTextDocument(document);
+
+        const line = document
+            .getText()
+            .split("\n")
+            .findIndex((text) => text.includes("function discountLabel()"));
+        const lens = (await lensesOf(document)).find(
+            (candidate) => candidate.range.start.line === line,
+        );
+
+        assert.strictEqual(lens?.command?.title, "1 read, 0 writes");
+    });
 });

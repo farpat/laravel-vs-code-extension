@@ -26,7 +26,6 @@ const MODEL_STATIC_METHODS = new Set([
     "newQuery",
     "newModelQuery",
     "on",
-    "factory",
 ]);
 
 /**
@@ -130,6 +129,23 @@ const FACTORY_MODEL_METHODS = new Set([
     "createOneQuietly",
 ]);
 
+/**
+ * The factory Laravel finds for a model when the model names none: `App\Models\Admin\User`
+ * gets `Database\Factories\Admin\UserFactory`, generic over the model. A `newFactory()`
+ * override, a `#[UseFactory]` attribute or a `HasFactory<...>` generic can name another
+ * one, but the question does not carry them; an `@method factory()` docblock on the
+ * model is read before this answer.
+ */
+function conventionalFactory(model: string): string {
+    const name = model.startsWith("App\\Models\\")
+        ? model.slice("App\\Models\\".length)
+        : model.startsWith("App\\")
+          ? model.slice("App\\".length)
+          : model;
+
+    return `Database\\Factories\\${name}Factory<${model}>`;
+}
+
 /** The owner as it was asked about, generic arguments and all, for a fluent call. */
 function itself(member: MemberQuestion): string {
     return member.arguments.length > 0
@@ -182,6 +198,10 @@ export function eloquentMemberType(member: MemberQuestion): string | null {
 
     if (!isModel) {
         return null;
+    }
+
+    if (member.name === "factory") {
+        return conventionalFactory(member.owner);
     }
 
     // With no builder of its own known, the model stands for its builder as well.

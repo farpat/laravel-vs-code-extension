@@ -23,7 +23,25 @@ suite("Eloquent Members Test Suite", () => {
             eloquentMemberType(question("firstOrCreate")),
             MODEL,
         );
-        assert.strictEqual(eloquentMemberType(question("factory")), MODEL);
+    });
+
+    test("answers factory() with the factory Laravel finds for the model", () => {
+        assert.strictEqual(
+            eloquentMemberType(question("factory")),
+            `Database\\Factories\\CustomerFactory<${MODEL}>`,
+        );
+        assert.strictEqual(
+            eloquentMemberType(question("factory", "App\\Models\\Admin\\User")),
+            "Database\\Factories\\Admin\\UserFactory<App\\Models\\Admin\\User>",
+        );
+        assert.strictEqual(
+            eloquentMemberType(question("factory", "App\\User")),
+            "Database\\Factories\\UserFactory<App\\User>",
+        );
+        assert.strictEqual(
+            eloquentMemberType(question("factory", "Modules\\Blog\\Post")),
+            "Database\\Factories\\Modules\\Blog\\PostFactory<Modules\\Blog\\Post>",
+        );
     });
 
     test("keeps a builder generic over its model until it hands the model back", () => {
