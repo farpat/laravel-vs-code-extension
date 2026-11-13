@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { sendLspRequest } from "../lsp/client";
+import { isLspClientRunning, sendLspRequest } from "../lsp/client";
 import { phpToolbox, PhpToolboxUsageEntry } from "../support/phpToolbox";
 
 type LspPosition = { line: number; character: number };
@@ -67,6 +67,15 @@ export async function showUsagesCommand(
     const at = position ?? editor?.selection.active;
 
     if (!documentUri || !at) {
+        return;
+    }
+
+    // Run from the palette, the command can come before the server is up.
+    if (!isLspClientRunning()) {
+        void vscode.window.showWarningMessage(
+            "The Laravel language server is not running",
+        );
+
         return;
     }
 

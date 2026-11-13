@@ -71,6 +71,11 @@ export async function restartLspClient(): Promise<LanguageClient | undefined> {
     return startLspClient();
 }
 
+/** True when a language server runs and can answer requests. */
+export function isLspClientRunning(): boolean {
+    return client !== undefined;
+}
+
 export async function sendLspRequest<T>(
     method: string,
     params: object = {},
