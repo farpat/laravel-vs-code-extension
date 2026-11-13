@@ -1,5 +1,6 @@
 import os from "os";
-import { sendLspRequest } from "@src/lsp/client";
+import { isLspClientRunning, sendLspRequest } from "@src/lsp/client";
+import { info } from "./logger";
 import { getPhpCommand } from "../lsp/php";
 
 export const debugInfo: Record<string, string> = {};
@@ -7,6 +8,15 @@ export const debugInfo: Record<string, string> = {};
 export const collectDebugInfo = () => {
     debugInfo["os"] = os.platform();
     debugInfo["arch"] = os.arch();
+
+    if (!isLspClientRunning()) {
+        info(
+            "No debug info from the Laravel language server: it is not running",
+        );
+        debugInfo["php_command"] = getPhpCommand().join(" ");
+
+        return;
+    }
 
     sendLspRequest<Record<string, string>>("laravel/data", {
         name: "debugInfo",
