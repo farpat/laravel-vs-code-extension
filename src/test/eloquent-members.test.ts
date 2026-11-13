@@ -95,6 +95,20 @@ suite("Eloquent Members Test Suite", () => {
         );
     });
 
+    test("reads a pivot as a model, not as a relation", () => {
+        const pivot = "App\\Models\\RoleUser";
+
+        assert.strictEqual(
+            eloquentMemberType(
+                question("first", pivot, [
+                    "Illuminate\\Database\\Eloquent\\Relations\\Pivot",
+                    "Illuminate\\Database\\Eloquent\\Model",
+                ]),
+            ),
+            pivot,
+        );
+    });
+
     test("has no say on what is not Eloquent's, not a call, or not a known method", () => {
         assert.strictEqual(
             eloquentMemberType(

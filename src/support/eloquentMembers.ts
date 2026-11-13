@@ -161,7 +161,10 @@ export function eloquentMemberType(member: MemberQuestion): string | null {
         return FACTORY_MODEL_METHODS.has(member.name) ? model : null;
     }
 
-    if (kinds.some((kind) => RELATION.test(kind))) {
+    // A pivot is a model, though its base lives in the Relations namespace.
+    const isModel = MODEL_BASES.some((base) => kinds.includes(base));
+
+    if (!isModel && kinds.some((kind) => RELATION.test(kind))) {
         if (MODEL_METHODS.has(member.name)) {
             return model;
         }
@@ -177,7 +180,7 @@ export function eloquentMemberType(member: MemberQuestion): string | null {
         return MODEL_METHODS.has(member.name) ? model : null;
     }
 
-    if (!MODEL_BASES.some((base) => kinds.includes(base))) {
+    if (!isModel) {
         return null;
     }
 
