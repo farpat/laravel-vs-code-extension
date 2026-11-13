@@ -22,4 +22,13 @@ export default defineConfig([
         workspaceFolder: "./src/test/fixtures/laravel-react",
         mocha,
     },
+    {
+        // The server path points at nothing: the first server start fails, which is
+        // what these tests need.
+        label: "no-server",
+        files: "out/test/no-server/*.test.js",
+        workspaceFolder: "./src/test/fixtures/laravel-react",
+        env: { LARAVEL_LSP_BINARY_PATH: "/nonexistent/laravel-lsp" },
+        mocha,
+    },
 ]);

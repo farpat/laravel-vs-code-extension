@@ -116,6 +116,15 @@ export async function activate(context: vscode.ExtensionContext) {
 
     info("Started");
 
+    // The usages lens runs this command. The server may start later (after a phpCommand
+    // change), so the command does not wait for the first start.
+    context.subscriptions.push(
+        vscode.commands.registerCommand(
+            commandName("laravel.showUsages"),
+            showUsagesCommand,
+        ),
+    );
+
     // PHP Toolbox counts what reaches a method; Laravel reaches it in ways plain PHP does
     // not show: an accessor read as a property, a class built by the container, a model
     // handed back by a query.
@@ -152,13 +161,6 @@ export async function activate(context: vscode.ExtensionContext) {
         const { registerTestRunner } = await import("./test-runner/index.js");
 
         registerTestRunner();
-
-        context.subscriptions.push(
-            vscode.commands.registerCommand(
-                commandName("laravel.showUsages"),
-                showUsagesCommand,
-            ),
-        );
     }
 
     void checkForLspUpdate(context);
