@@ -29,7 +29,7 @@ export async function forceLspUpdate(
 
     if (isUsingCustomLspBinary()) {
         vscode.window.showInformationMessage(
-            "The Laravel LSP is managed by LARAVEL_LSP_BINARY_PATH and cannot be updated by the extension.",
+            "The Laravel LSP is managed by the Laravel.lsp.path setting or LARAVEL_LSP_BINARY_PATH and cannot be updated by the extension.",
         );
         return;
     }
