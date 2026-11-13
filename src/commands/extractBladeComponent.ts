@@ -29,9 +29,20 @@ const variablesIn = (markup: string): string[] => {
     return [...markup.matchAll(/\$([A-Za-z_]\w*)/g)].map((match) => match[1]);
 };
 
+// Directives that set a variable inside their block: `@error` sets $message,
+// `@session` and `@context` set $value.
+const directiveVariables: Array<[RegExp, string]> = [
+    [/@error\b/, "message"],
+    [/@session\b/, "value"],
+    [/@context\b/, "value"],
+];
+
 // Variables the markup declares on its own: a loop item is not passed in from outside.
 const declaredIn = (markup: string): string[] => {
     const declared = [
+        ...directiveVariables
+            .filter(([directive]) => directive.test(markup))
+            .map(([, variable]) => variable),
         ...[
             ...markup.matchAll(/@(?:foreach|forelse)\s*\(.+?\s+as\s+(.+?)\)/gs),
         ].flatMap((match) => variablesIn(match[1])),

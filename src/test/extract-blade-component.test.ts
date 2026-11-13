@@ -19,6 +19,14 @@ suite("Extract Blade Component Test Suite", () => {
         assert.deepStrictEqual(propsOf(markup), ["field"]);
     });
 
+    test("leaves out the variable an error or session block sets", () => {
+        const markup = `<input name="{{ $name }}">
+@error('email')<p>{{ $message }}</p>@enderror
+@session('status')<p>{{ $value }}</p>@endsession`;
+
+        assert.deepStrictEqual(propsOf(markup), ["name"]);
+    });
+
     test("leaves out the variables the markup declares", () => {
         const markup = `@foreach ($rows as $row)
     <li>{{ $row->label }}</li>
